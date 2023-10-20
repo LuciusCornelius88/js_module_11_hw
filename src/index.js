@@ -153,7 +153,8 @@ async function handleFetch() {
 async function fetchImages() {
   const requestParams = {
     params: {
-      key: apiKey,
+      //   key: apiKey,
+      key: '40111569-727bf841ed3239fc17d74198a',
       q: searchInput,
       image_type: defaultImgType,
       category: defaultCategory,
