@@ -5,15 +5,12 @@ import { axiosInstance, apiKey, defaultImgType, defaultCategory, defaultHitsPerP
 
 // Define custom error class for a case of incorrect input
 
-class NotFoundError {
+class NotFoundError extends Error {
   constructor() {
+    super('Sorry, there are no images matching your search query. Please try again.');
     this.name = 'Not found';
-    this.message = 'Sorry, there are no images matching your search query. Please try again.';
-    this.stack = new Error().stack;
   }
 }
-
-NotFoundError.prototype = Object.create(Error.prototype);
 
 // Dom elements
 
