@@ -1,0 +1,137 @@
+/* Reset Default */
+
+:root {
+  --cards-gap: 20px;
+}
+
+h1,
+h2,
+h3,
+h4,
+p {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+ul,
+ol {
+  margin-top: 0;
+  margin-bottom: 0;
+  padding-left: 0;
+  list-style: none;
+}
+
+img {
+  display: block;
+  width: 350px;
+  height: 235px;
+}
+
+button {
+  cursor: pointer;
+}
+
+body {
+  max-width: 1600px;
+  margin: 0 auto;
+}
+
+textarea {
+  resize: none;
+}
+
+a {
+  text-decoration: none;
+}
+
+/* Main styles */
+
+/* Header */
+
+.header,
+.main {
+  width: 100%;
+  max-width: 1600px;
+  margin: 0 auto;
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+
+.header {
+  background-color: rgba(6, 147, 186, 0.8);
+}
+
+.container {
+  width: 1500px;
+  margin-right: auto;
+  margin-left: auto;
+  padding-right: 15px;
+  padding-left: 15px;
+}
+
+.search-form {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+  align-items: center;
+}
+
+.input-container {
+  position: relative;
+}
+
+.input-history {
+  position: absolute;
+  display: block;
+  width: 100%;
+  background-color: #ffff;
+}
+
+.history-item {
+  cursor: pointer;
+}
+
+/* Content */
+
+.gallery {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: calc(-1 * var(--cards-gap));
+  margin-left: calc(-1 * var(--cards-gap));
+  margin-bottom: 30px;
+}
+
+.photo-card {
+  margin-top: var(--cards-gap);
+  margin-left: var(--cards-gap);
+  flex-basis: calc((100% / 4) - var(--cards-gap));
+}
+
+.photo {
+  margin-bottom: 5px;
+}
+
+.info {
+  display: flex;
+  gap: 25px;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.info-item-cat {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.load-more-btn {
+  display: block;
+  margin: 0 auto;
+}
+
+.hidden,
+.hidden * {
+  display: none;
+}

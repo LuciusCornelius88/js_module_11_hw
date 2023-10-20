@@ -14,16 +14,25 @@
     />
 
     <link rel="stylesheet" href="./css/styles.css" />
+    <script type="module" src="./index.js"></script>
   </head>
   <body>
     <header class="header">
       <div class="container header-container">
         <form class="search-form" id="search-form">
-          <input type="text" name="searchQuery" autocomplete="off" placeholder="Search images..." />
+          <div class="input-container">
+            <input class="input-field" type="text" name="searchQuery" autocomplete="off" placeholder="Search images..." />
+            <div class="input-history hidden"></div>
+          </div>
           <button type="submit">Search</button>
         </form>
       </div>
     </header>
-    <script type="module" src="./index.js"></script>
+    <main class="main">
+      <div class="container gallery-container hidden">
+        <div class="gallery"></div>
+        <button class="load-more-btn btn">Load more</button>
+      </div>
+    </main>
   </body>
 </html>
