@@ -15,23 +15,29 @@
 
     <link rel="stylesheet" href="./css/styles.css" />
     <script type="module" src="./index.js"></script>
+    <script src="https://kit.fontawesome.com/e8daf12ad0.js" crossorigin="anonymous"></script>
   </head>
   <body>
     <header class="header">
       <div class="container header-container">
         <form class="search-form" id="search-form">
           <div class="input-container">
-            <input class="input-field" type="text" name="searchQuery" autocomplete="off" placeholder="Search images..." />
-            <div class="input-history hidden"></div>
+            <div class="input-field-container">
+              <input class="input-field" type="text" name="searchQuery" autocomplete="off" placeholder="Search images..." />
+              <button class="search-btn" type="submit"></button>
+            </div>
+            <div class="input-history-container hidden">
+              <div class="input-history-background"></div>
+              <div class="input-history"></div>
+            </div>
           </div>
-          <button type="submit">Search</button>
         </form>
       </div>
     </header>
     <main class="main">
       <div class="container gallery-container hidden">
         <div class="gallery"></div>
-        <button class="load-more-btn btn">Load more</button>
+        <button class="load-more-btn">Load more</button>
       </div>
     </main>
   </body>

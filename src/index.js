@@ -16,6 +16,7 @@ class NotFoundError extends Error {
 
 const form = document.querySelector('.search-form');
 const inputField = document.querySelector('.input-field');
+const inputHistoryContainer = document.querySelector('.input-history-container');
 const inputHistory = document.querySelector('.input-history');
 const galleryContainer = document.querySelector('.gallery-container');
 const gallery = document.querySelector('.gallery');
@@ -27,13 +28,19 @@ let currentHistory;
 
 form.addEventListener('submit', getImages);
 loadMoreBtn.addEventListener('click', loadMore);
-inputHistory.addEventListener('mousedown', chooseInput);
+loadMoreBtn.addEventListener('mousedown', onMouseDown);
+loadMoreBtn.addEventListener('mouseup', onMouseUp);
+inputHistoryContainer.addEventListener('mousedown', chooseInput);
 inputField.addEventListener('focus', showInputHistory);
 inputField.addEventListener('blur', hideInputHistory);
+document.addEventListener('mouseup', onMouseUp);
 
 let currentPage = 1;
 let maxImages;
 let searchInput;
+
+let timeMouseDown;
+let timeMouseUp;
 
 // Supplementary functions
 
@@ -74,6 +81,17 @@ const styleNumbers = (num) => {
   });
 };
 
+const smoothScroll = () => {
+  const { height: cardHeight } = document.querySelector('.gallery').firstElementChild.getBoundingClientRect();
+
+  window.scrollBy({
+    top: cardHeight * 2,
+    behavior: 'smooth',
+  });
+};
+
+// Init local storage
+
 onLoad();
 
 // Main functions
@@ -87,6 +105,8 @@ function getImages(evt) {
   resetContent();
   resetCurrentPage();
   addHidden(loadMoreBtn);
+  addHidden(inputHistoryContainer);
+  inputField.blur();
   Notiflix.Loading.dots();
 
   setTimeout(async () => {
@@ -95,14 +115,16 @@ function getImages(evt) {
       Notiflix.Loading.remove();
       Notiflix.Notify.success(`You loaded page ${currentPage} of total ${Math.ceil(maxImages / defaultHitsPerPage)} pages`);
       removeHidden(loadMoreBtn);
-      currentHistory = JSON.parse(localStorage.getItem(INPUT_HISTORY_KEY));
-      if (!currentHistory.includes(searchInput)) {
-        if (currentHistory.length === MAX_HISTORY_LEN) {
-          currentHistory.shift();
+      if (searchInput !== '') {
+        currentHistory = JSON.parse(localStorage.getItem(INPUT_HISTORY_KEY));
+        if (!currentHistory.includes(searchInput)) {
+          if (currentHistory.length === MAX_HISTORY_LEN) {
+            currentHistory.shift();
+          }
+          currentHistory.push(searchInput);
+          localStorage.setItem(INPUT_HISTORY_KEY, JSON.stringify(currentHistory));
+          createInputHistory();
         }
-        currentHistory.push(searchInput);
-        localStorage.setItem(INPUT_HISTORY_KEY, JSON.stringify(currentHistory));
-        createInputHistory();
       }
     } catch (err) {
       addHidden(loadMoreBtn);
@@ -124,6 +146,7 @@ function loadMore() {
   setTimeout(async () => {
     try {
       await handleFetch();
+      smoothScroll();
       Notiflix.Loading.remove();
       Notiflix.Notify.success(`You loaded page ${currentPage} of total ${Math.ceil(maxImages / defaultHitsPerPage)} pages`);
       if (defaultHitsPerPage * currentPage >= maxImages) {
@@ -153,8 +176,7 @@ async function handleFetch() {
 async function fetchImages() {
   const requestParams = {
     params: {
-      //   key: apiKey,
-      key: '40111569-727bf841ed3239fc17d74198a',
+      key: apiKey,
       q: searchInput,
       image_type: defaultImgType,
       category: defaultCategory,
@@ -183,7 +205,7 @@ function createMarkup(data) {
       <div class="photo-card">
         <div class="photo">
           <a href="${largeImageURL}">
-            <img src="${webformatURL}" alt="${tags}" loading="lazy" />
+            <img class="image-item" src="${webformatURL}" alt="${tags}" loading="lazy" />
           </a>
         </div>
         <div class="info">
@@ -236,13 +258,13 @@ function chooseInput(evt) {
 function showInputHistory() {
   currentHistory = JSON.parse(localStorage.getItem(INPUT_HISTORY_KEY));
   if (currentHistory.length > 0) {
-    removeHidden(inputHistory);
+    removeHidden(inputHistoryContainer);
   }
 }
 
 function hideInputHistory(evt) {
   setTimeout(() => {
-    addHidden(inputHistory);
+    addHidden(inputHistoryContainer);
   }, 50);
 }
 
@@ -296,5 +318,28 @@ function prevOnKey(evt) {
 function closeOnKey(evt) {
   if (evt.code === 'Enter') {
     lightbox.close();
+  }
+}
+
+// Handle buttom click
+
+function onMouseDown(evt) {
+  timeMouseDown = new Date();
+  const { target } = evt;
+  target.classList.add('active');
+}
+
+function onMouseUp() {
+  handleMouseUp(loadMoreBtn);
+}
+
+function handleMouseUp(button) {
+  if (button.classList.contains('active')) {
+    timeMouseUp = new Date();
+    const timeout = timeMouseUp - timeMouseDown < 300 ? 250 : 0;
+    setTimeout(() => {
+      button.classList.remove('active');
+      button.blur();
+    }, timeout);
   }
 }
