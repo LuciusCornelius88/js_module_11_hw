@@ -1,8 +1,9 @@
 import axios from 'axios';
-import 'dotenv/config';
+// import 'dotenv/config';
 
 const URL = 'https://pixabay.com';
-const apiKey = process.env.API_KEY;
+// const apiKey = process.env.API_KEY;
+const apiKey = '40111569-727bf841ed3239fc17d74198a';
 
 const defaultImgType = 'photo';
 const defaultCategory = 'nature';
