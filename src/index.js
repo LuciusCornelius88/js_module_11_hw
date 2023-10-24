@@ -44,7 +44,7 @@ let timeMouseUp;
 
 // Supplementary functions
 
-const onLoad = () => {
+const loadHistory = () => {
   currentHistory = JSON.parse(localStorage.getItem(INPUT_HISTORY_KEY));
   if (!currentHistory) {
     currentHistory = [];
@@ -92,7 +92,7 @@ const smoothScroll = () => {
 
 // Init local storage
 
-onLoad();
+loadHistory();
 
 // Main functions
 
@@ -114,9 +114,15 @@ function getImages(evt) {
       await handleFetch();
       Notiflix.Loading.remove();
       Notiflix.Notify.success(`You loaded page ${currentPage} of total ${Math.ceil(maxImages / defaultHitsPerPage)} pages`);
-      removeHidden(loadMoreBtn);
+      if (defaultHitsPerPage * currentPage >= maxImages) {
+        Notiflix.Notify.warning(`You loaded all the ${maxImages} images!`);
+        addHidden(loadMoreBtn);
+      } else {
+        removeHidden(loadMoreBtn);
+      }
+
       if (searchInput !== '') {
-        currentHistory = JSON.parse(localStorage.getItem(INPUT_HISTORY_KEY));
+        currentHistory = JSON.parse(localStorage.getItem(INPUT_HISTORY_KEY)) ?? [];
         if (!currentHistory.includes(searchInput)) {
           if (currentHistory.length === MAX_HISTORY_LEN) {
             currentHistory.shift();
