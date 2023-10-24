@@ -151,6 +151,10 @@ a {
   padding: 1.5px 0 1.5px 8px;
 }
 
+.input-history .history-item-container:last-child {
+  margin-bottom: 5px;
+}
+
 .history-item {
   cursor: pointer;
 }
